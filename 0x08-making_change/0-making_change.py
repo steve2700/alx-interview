@@ -14,25 +14,13 @@ def makeChange(coins, total):
            If total cannot be met by any number of coins you have, return -1.
     """
 
-    # Sort the coins in descending order
-    coins.sort(reverse=True)
+    # Initialize an array to store the minimum number of coins needed for each amount
+    dp = [float('inf')] * (total + 1)
+    dp[0] = 0
 
-    # Initialize a variable to count the number of coins used
-    count = 0
+    # Iterate through each coin value
+    for coin in coins:
+        for amount in range(coin, total + 1):
+            dp[amount] = min(dp[amount], dp[amount - coin] + 1)
 
-    # While the remaining amount is greater than 0
-    while total > 0:
-        # Find the largest coin that is less than or equal to the remaining amount
-        for coin in coins:
-            if coin <= total:
-                break
-
-        # Subtract the value of the coin from the remaining amount
-        total -= coin
-
-        # Increment the count of coins used
-        count += 1
-
-    # Return the count of coins used
-    return count
-
+    return dp[total] if dp[total] != float('inf') else -1
